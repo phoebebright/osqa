@@ -1,9 +1,10 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import patterns, include, url
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
 urlpatterns = patterns('',
     (r'', include('forum.urls')),
+
 )
 
 if 'rosetta' in settings.INSTALLED_APPS:

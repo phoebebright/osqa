@@ -1,4 +1,7 @@
-The OSQA project - open source Q&A system
+Fork of The OSQA project - open source Q&A system
+
+Initially just want to upgrade to django 1.8 (still in development).  Should be good for django 1.7 also.
+Not going to create a merge django user and forum user into a single custom user as I want to use this with an existing application which already has a custom user.
 
 Project Q&A site - http://meta.osqa.net
 Homepage - http://www.osqa.net

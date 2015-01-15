@@ -2,9 +2,15 @@
 import os.path
 import sys
 
+DEBUG=True
+
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+
+
 SITE_ID = 1
 
-SECRET_KEY = 'a;::qCl1mfh?avagttOJ;8f5Rr54d,9qy7;o15M2cYO75?OQo51u3LnQ;!8N.:,7'
+SECRET_KEY = 'a;::qCl1mfh?avagttOJ;8f5Rr54d,9qy7;o15M2cYO75?ddo51u3LnQ;!8N.:,7'
 
 CACHE_MAX_KEY_LENGTH = 235
 
@@ -20,27 +26,53 @@ MIDDLEWARE_CLASSES = [
     'forum.middleware.cancel.CancelActionMiddleware',
     'forum.middleware.admin_messages.AdminMessagesMiddleware',
     'forum.middleware.custom_pages.CustomPagesFallbackMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
     'forum.middleware.django_cookies.CookiePostHandlerMiddleware',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    'django.core.context_processors.i18n',
+    "django.core.context_processors.media",
     'django.core.context_processors.request',
-    'forum.context.application_settings',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'forum.context.application_settings',
     'forum.user_messages.context_processors.user_messages',
-    'django.contrib.auth.context_processors.auth',
+    
 ]
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'config.urls'
 APPEND_SLASH = True
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__),'forum','skins').replace('\\','/'),
+	 os.path.join(BASE_DIR, 'forum/skins'),
+
+    )
+    
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'shared_static')
+STATIC_URL = '/shared_static/'
+
+
+# Additional locations of static files
+'''
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'web/static'),
+    os.path.join(BASE_DIR, 'theme/static'),
+)
+'''
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 
-FILE_UPLOAD_TEMP_DIR = os.path.join(os.path.dirname(__file__), 'tmp').replace('\\','/')
+FILE_UPLOAD_TEMP_DIR = os.path.join(BASE_DIR, 'tmp')
 FILE_UPLOAD_HANDLERS = ("django.core.files.uploadhandler.MemoryFileUploadHandler",
  "django.core.files.uploadhandler.TemporaryFileUploadHandler",)
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -52,8 +84,11 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
+
 # User settings
 from settings_local import *
+DEBUG=True
+
 
 template_loaders = (
     'django.template.loaders.filesystem.Loader',
@@ -84,8 +119,8 @@ if FORCE_SCRIPT_NAME.endswith('/'):
     FORCE_SCRIPT_NAME = FORCE_SCRIPT_NAME[:-1]
 
 #Module system initialization
-MODULES_PACKAGE = 'forum_modules'
-MODULES_FOLDER = os.path.join(SITE_SRC_ROOT, MODULES_PACKAGE)
+MODULES_PACKAGE = os.path.join(BASE_DIR, 'forum_modules')
+MODULES_FOLDER = os.path.join(BASE_DIR, 'forum_modules')
 
 MODULE_LIST = filter(lambda m: getattr(m, 'CAN_USE', True), [
         __import__('forum_modules.%s' % f, globals(), locals(), ['forum_modules'])
@@ -109,13 +144,17 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'django.contrib.admin',
+    
     'django.contrib.humanize',
     'django.contrib.sitemaps',
-    'django.contrib.messages',
+    
     'forum',
 ]
 
+'''
 if DEBUG:
     try:
         import debug_toolbar
@@ -123,12 +162,8 @@ if DEBUG:
         INSTALLED_APPS.append('debug_toolbar')
     except:
         pass
+'''
 
-try:
-    import south
-    INSTALLED_APPS.append('south')
-except:
-    pass
 
 # Try loading Gunicorn web server
 try:

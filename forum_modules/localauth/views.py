@@ -7,6 +7,8 @@ from forms import ClassicRegisterForm
 from forum.views.auth import login_and_forward
 from forum.actions import UserJoinsAction
 
+from datetime import datetime
+
 def register(request):
     if request.method == 'POST':
         form = ClassicRegisterForm(request.POST)
@@ -15,9 +17,11 @@ def register(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             email = form.cleaned_data['email']
+            
 
             user_ = User(username=username, email=email)
             user_.set_password(password)
+            user_.last_login = datetime.now()   #fails with "Column 'last_login' cannot be null" without this
 
             if User.objects.all().count() == 0:
                 user_.is_superuser = True

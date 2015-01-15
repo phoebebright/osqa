@@ -1,5 +1,5 @@
 {% load i18n extra_tags email_tags %}
-
+{% comment TODO: this fails with template object has not attribute nodelist %}
 {% declare %}
     prefix = settings.EMAIL_SUBJECT_PREFIX
     app_name = settings.APP_SHORT_NAME
