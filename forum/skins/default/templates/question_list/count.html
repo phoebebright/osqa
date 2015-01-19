@@ -1,8 +1,6 @@
 {% spaceless %}
 {% load i18n humanize extra_tags %}
-{% declare %}
-    answer_count = questions.children_count('answer')
-{% enddeclare %}
+{% with answer_count = questions.children_count('answer') %}
 
 <div class="boxC">
     <div class="questions-count">
@@ -24,3 +22,5 @@
     </div>
 </div>
 {% endspaceless %}
+
+{% endwith %}

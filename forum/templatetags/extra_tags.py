@@ -255,7 +255,7 @@ def fullmedia(url):
     path = media(url)
     return "%s%s" % (domain, path)
 
-
+'''
 class SimpleVarNode(template.Node):
     def __init__(self, name, value):
         self.name = name
@@ -329,7 +329,7 @@ def do_declare(parser, token):
     nodelist = parser.parse(('enddeclare',))
     parser.delete_first_token()
     return DeclareNode(nodelist)
-
+'''
 # Usage: {% random 1 999 %}
 # Generates random number in the template
 class RandomNumberNode(template.Node):
